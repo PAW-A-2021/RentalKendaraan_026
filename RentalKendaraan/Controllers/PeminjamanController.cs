@@ -9,23 +9,23 @@ using RentalKendaraan.Models;
 
 namespace RentalKendaraan.Controllers
 {
-    public class PeminjamenController : Controller
+    public class PeminjamanController : Controller
     {
         private readonly RentKendaraanContext _context;
 
-        public PeminjamenController(RentKendaraanContext context)
+        public PeminjamanController(RentKendaraanContext context)
         {
             _context = context;
         }
 
-        // GET: Peminjamen
+        // GET: Peminjaman
         public async Task<IActionResult> Index()
         {
             var rentKendaraanContext = _context.Peminjaman.Include(p => p.IdCustomerNavigation).Include(p => p.IdJaminanNavigation).Include(p => p.IdKendaraanNavigation);
             return View(await rentKendaraanContext.ToListAsync());
         }
 
-        // GET: Peminjamen/Details/5
+        // GET: Peminjaman/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,7 +46,7 @@ namespace RentalKendaraan.Controllers
             return View(peminjaman);
         }
 
-        // GET: Peminjamen/Create
+        // GET: Peminjaman/Create
         public IActionResult Create()
         {
             ViewData["IdCustomer"] = new SelectList(_context.Customer, "IdCustomer", "IdCustomer");
@@ -55,7 +55,7 @@ namespace RentalKendaraan.Controllers
             return View();
         }
 
-        // POST: Peminjamen/Create
+        // POST: Peminjaman/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -74,7 +74,7 @@ namespace RentalKendaraan.Controllers
             return View(peminjaman);
         }
 
-        // GET: Peminjamen/Edit/5
+        // GET: Peminjaman/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,7 +93,7 @@ namespace RentalKendaraan.Controllers
             return View(peminjaman);
         }
 
-        // POST: Peminjamen/Edit/5
+        // POST: Peminjaman/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -131,7 +131,7 @@ namespace RentalKendaraan.Controllers
             return View(peminjaman);
         }
 
-        // GET: Peminjamen/Delete/5
+        // GET: Peminjaman/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -152,7 +152,7 @@ namespace RentalKendaraan.Controllers
             return View(peminjaman);
         }
 
-        // POST: Peminjamen/Delete/5
+        // POST: Peminjaman/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
