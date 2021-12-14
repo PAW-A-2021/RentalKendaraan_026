@@ -19,7 +19,7 @@ namespace RentalKendaraan.Controllers
         }
 
         // GET: Jaminans
-        public async Task<IActionResult> Index(string ktsd, string searchString)
+        public async Task<IActionResult> Index(string ktsd, string searchString, string sortOrder, string currentFilter, int? pageNumber)
         {
             var ktsdList = new List<string>();
             var ktsdQuery = from d in _context.Jaminan orderby d.NamaJaminan select d.NamaJaminan;
@@ -34,8 +34,32 @@ namespace RentalKendaraan.Controllers
             {
                 menu = menu.Where(s => s.NamaJaminan.Contains(searchString));
             }
+            ViewData["CurrentSort"] = sortOrder;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            int pageSize = 5;
 
-            return View(await menu.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    menu = menu.OrderByDescending(s => s.NamaJaminan);
+                    break;
+                default: 
+                    menu = menu.OrderBy(s => s.NamaJaminan);
+                    break;
+            }
+
+            return View(await PaginatedList<Jaminan>.CreateAsync(menu.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Jaminans/Details/5

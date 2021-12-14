@@ -19,7 +19,7 @@ namespace RentalKendaraan.Controllers
         }
 
         // GET: KondisiKendaraans
-        public async Task<IActionResult> Index(string ktsd, string searchString)
+        public async Task<IActionResult> Index(string ktsd, string searchString, string sortOrder, string currentFilter, int? pageNumber)
         {
             var ktsdList = new List<string>();
             var ktsdQuery = from d in _context.KondisiKendaraan orderby d.NamaKondisi select d.NamaKondisi;
@@ -34,8 +34,33 @@ namespace RentalKendaraan.Controllers
             {
                 menu = menu.Where(s => s.NamaKondisi.Contains(searchString) );
             }
+            ViewData["CurrentSort"] = sortOrder;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewData["CurrentFilter"] = searchString;
+            int pageSize = 5;
 
-            return View(await menu.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    menu = menu.OrderByDescending(s => s.NamaKondisi);
+                    break;
+                default: 
+                    menu = menu.OrderBy(s => s.NamaKondisi);
+                    break;
+            }
+
+            return View(await PaginatedList<KondisiKendaraan>.CreateAsync(menu.AsNoTracking(), pageNumber ?? 1, pageSize));
+
         }
 
         // GET: KondisiKendaraans/Details/5
