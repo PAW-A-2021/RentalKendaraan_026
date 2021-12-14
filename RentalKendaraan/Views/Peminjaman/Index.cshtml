@@ -27,11 +27,11 @@
 
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Id Customer</a>
+                @Html.DisplayName("Biaya")
 
             </th>
             <th>
-                @Html.DisplayName("Biaya")
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Id Customer</a>
 
             </th>
             <th>
